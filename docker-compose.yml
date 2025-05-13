@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile
     image: php:8.2-fpm
     container_name: online-asset-manager-api
+    ports:
+      - "5173:5173"
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html

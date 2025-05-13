@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
     libmagickwand-dev \
     libxslt-dev \
     default-mysql-client \
+    npm \
     && docker-php-ext-install pdo pdo_mysql
 
 # Set working directory

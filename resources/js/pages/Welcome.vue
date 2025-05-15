@@ -1,5 +1,25 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const companyName = ref('');
+const loading = ref(false);
+
+function submitCompanyInfo() {
+    if (!companyName.value) return;
+    loading.value = true;
+    router.post('/company-info', { company_name: companyName.value }, {
+        onSuccess: (page) => {
+            loading.value = false;
+            if (page.props && page.props.id) {
+                router.visit(`/company-info/${page.props.id}`);
+            } else {
+                router.visit(`/company-info/1`); // fallback
+            }
+        },
+        onError: () => { loading.value = false; },
+    });
+}
 </script>
 
 <template>
@@ -17,9 +37,13 @@ import { Head } from '@inertiajs/vue3';
                 type="text" 
                 class="mt-4 w-80 rounded border border-gray-900 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-500 text-gray-500" 
                 placeholder="Wprowadź nazwę firmy" 
+                v-model="companyName"
+                :disabled="loading"
             />
             <button 
                 class="mt-6 w-20 rounded bg-gray-500 py-2 text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                :disabled="loading"
+                @click="submitCompanyInfo"
             >
                 Dalej -> 
             </button>

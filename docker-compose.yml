@@ -1,0 +1,51 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: php:8.2-fpm
+    container_name: online-asset-manager-api
+    ports:
+      - "5173:5173"
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    networks:
+      - online-asset-manager
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx:alpine
+    container_name: online-asset-manager-webserver
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - online-asset-manager
+    depends_on:
+      - app
+
+  db:
+    image: mysql:8.0
+    container_name: online-asset-manager-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - online-asset-manager
+
+networks:
+  online-asset-manager:
+    driver: bridge
+
+volumes:
+  dbdata:

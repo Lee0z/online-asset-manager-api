@@ -36,7 +36,6 @@ class CompanyInfoController extends Controller
         ]);
         $company = CompanyInfo::findOrFail($id);
         $company->update($validated);
-        // Redirect to admin setup page for Inertia
         return redirect()->route('admin.setup');
     }
 }

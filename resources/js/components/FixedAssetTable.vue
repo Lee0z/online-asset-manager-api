@@ -27,7 +27,7 @@ function generateReport() {
   const company = page.props.company || {};
   const user = page.props.auth?.user || {};
   const doc = new jsPDF({
-    orientation: 'p',
+    orientation: 'landscape',
     unit: 'mm',
     format: 'a4',
   });
@@ -39,7 +39,7 @@ function generateReport() {
 
   doc.setFont('TimesNewRoman', 'bold');
   doc.setFontSize(16);
-  doc.text('Raport środków trwałych', 14, 18);
+  doc.text('Wykaz środków trwałych oraz wartości niematerialnych i prawnych', 14, 18);
   doc.setFont('TimesNewRoman', 'normal');
   doc.setFontSize(12);
   let y = 28;
@@ -59,23 +59,43 @@ function generateReport() {
     y += 8;
   }
 
-  const assetRows = props.assets.map((asset: any) => [
-    asset.asset_name,
-    asset.kst_symbol,
-    asset.current_value,
-    asset.status,
-    asset.user?.name || '',
-    asset.status === 'zlikwidowany' ? asset.liquidation_date : asset.status === 'nabyty' ? asset.acquisition_date : asset.status === 'w użyciu' ? asset.commissioning_date : ''
+  const tableHead = [[
+    'Lp.',
+    'Data nabycia',
+    'Data przyjęcia do używania',
+    'Dokument nabycia',
+    'Określenie środka trwałego / WNiP',
+    'KŚT',
+    'Wartość początkowa',
+    'Stawka amortyzacyjna',
+    'Zaktualizowana wartość początkowa',
+    'Data i przyczyna likwidacji / Data zbycia',
+  ]];
+
+  const assetRows = (props.assets || []).map((asset: any, idx: number) => [
+    idx + 1,
+    asset.acquisition_date || '',
+    asset.commissioning_date || '',
+    asset.acquisition_document_type || '',
+    asset.asset_name || '',
+    asset.kst_symbol || '',
+    asset.initial_value != null ? asset.initial_value : '',
+    asset.depreciation_rate != null ? asset.depreciation_rate + '%' : '',
+    asset.current_value != null ? asset.current_value : '',
+    asset.liquidation_date
+      ? `${asset.liquidation_date}${asset.liquidation_reason ? ' - ' + asset.liquidation_reason : ''}`
+      : '',
   ]);
+
   autoTable(doc, {
-    head: [[
-      'Nazwa', 'KST', 'Wartość', 'Status', 'Użytkownik', 'Data'
-    ]],
+    head: tableHead,
     body: assetRows,
     startY: y,
     styles: { font: 'TimesNewRoman', fontSize: 10 },
     headStyles: { fillColor: [55, 65, 81], font: 'TimesNewRoman', fontStyle: 'bold' },
     margin: { left: 14, right: 14 },
+    tableWidth: 'auto',
+    theme: 'grid',
   });
 
   const watermark = `Utworzono przez: ${user.name || ''}`;
@@ -84,7 +104,7 @@ function generateReport() {
   doc.setTextColor(150);
   doc.text(watermark, 105, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
 
-  doc.save('raport_srodkow_trwalych.pdf');
+  doc.save('wykaz_srodkow_trwalych.pdf');
   closeReportModal();
 }
 

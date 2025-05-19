@@ -43,11 +43,31 @@ function formatZipInput(e: Event) {
 
 function submitCompanyDetails() {
     errors.value = {};
-    if (companyTaxNumber.value && !validateNip(companyTaxNumber.value)) {
+    // Require all fields
+    if (!companyTaxNumber.value) {
+        errors.value.nip = 'NIP jest wymagany.';
+    } else if (!validateNip(companyTaxNumber.value)) {
         errors.value.nip = 'NIP powinien mieć dokładnie 10 cyfr.';
     }
-    if (companyZipCode.value && !validateZip(companyZipCode.value)) {
+    if (!companyStreet.value) {
+        errors.value.street = 'Ulica jest wymagana.';
+    }
+    if (!companyStreetNumber.value) {
+        errors.value.streetNumber = 'Nr budynku jest wymagany.';
+    }
+    if (!companyZipCode.value) {
+        errors.value.zip = 'Kod pocztowy jest wymagany.';
+    } else if (!validateZip(companyZipCode.value)) {
         errors.value.zip = 'Kod pocztowy powinien mieć 5 cyfr.';
+    }
+    if (!companyCity.value) {
+        errors.value.city = 'Miasto jest wymagane.';
+    }
+    if (!companyState.value) {
+        errors.value.state = 'Województwo jest wymagane.';
+    }
+    if (!companyCountry.value) {
+        errors.value.country = 'Kraj jest wymagany.';
     }
     if (Object.keys(errors.value).length > 0) {
         loading.value = false;
@@ -84,15 +104,20 @@ function submitCompanyDetails() {
         </header>
         <div class="text-center mt-6">
             <div class="flex flex-col items-center space-y-4">
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="NIP" v-model="companyTaxNumber" :disabled="loading" />
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="NIP" v-model="companyTaxNumber" :disabled="loading" required />
                 <div v-if="errors.nip" class="text-red-500 text-xs">{{ errors.nip }}</div>
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Ulica" v-model="companyStreet" :disabled="loading" />
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Nr budynku" v-model="companyStreetNumber" :disabled="loading" />
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Kod pocztowy" :value="companyZipCode.length > 2 ? companyZipCode.slice(0,2)+'-'+companyZipCode.slice(2) : companyZipCode" @input="formatZipInput" maxlength="6" :disabled="loading" />
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Ulica" v-model="companyStreet" :disabled="loading" required />
+                <div v-if="errors.street" class="text-red-500 text-xs">{{ errors.street }}</div>
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Nr budynku" v-model="companyStreetNumber" :disabled="loading" required />
+                <div v-if="errors.streetNumber" class="text-red-500 text-xs">{{ errors.streetNumber }}</div>
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Kod pocztowy" :value="companyZipCode.length > 2 ? companyZipCode.slice(0,2)+'-'+companyZipCode.slice(2) : companyZipCode" @input="formatZipInput" maxlength="6" :disabled="loading" required />
                 <div v-if="errors.zip" class="text-red-500 text-xs">{{ errors.zip }}</div>
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Miasto" v-model="companyCity" :disabled="loading" />
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Województwo" v-model="companyState" :disabled="loading" />
-                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Kraj" v-model="companyCountry" :disabled="loading" />
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Miasto" v-model="companyCity" :disabled="loading" required />
+                <div v-if="errors.city" class="text-red-500 text-xs">{{ errors.city }}</div>
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Województwo" v-model="companyState" :disabled="loading" required />
+                <div v-if="errors.state" class="text-red-500 text-xs">{{ errors.state }}</div>
+                <input type="text" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Kraj" v-model="companyCountry" :disabled="loading" required />
+                <div v-if="errors.country" class="text-red-500 text-xs">{{ errors.country }}</div>
                 <button class="w-80 rounded bg-gray-500 py-2 text-sm font-medium text-white hover:bg-gray-600" :disabled="loading" @click="submitCompanyDetails">
                     Zapisz dane
                 </button>

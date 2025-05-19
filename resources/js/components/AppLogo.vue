@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
+import { usePage } from '@inertiajs/vue3';
+const company = (usePage().props.company as { company_name?: string }) ?? {};
 </script>
 
 <template>
-    <div class="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-        <AppLogoIcon class="size-5 fill-current text-white dark:text-black" />
-    </div>
     <div class="ml-1 grid flex-1 text-left text-sm">
-        <span class="mb-0.5 truncate font-semibold leading-none">Laravel Starter Kit</span>
+        <span class="font-bold text-gray-700 dark:text-gray-200">{{ company.company_name }}</span>
     </div>
 </template>

@@ -4,8 +4,15 @@ import { usePage, router, Head } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
 
+interface UserTableRow {
+  id: number;
+  name: string;
+  email: string;
+  is_admin: boolean;
+}
+
 const page = usePage();
-const users = ref(page.props.users || []);
+const users = ref<UserTableRow[]>(Array.isArray(page.props.users) ? page.props.users : []);
 
 const breadcrumbs: BreadcrumbItemType[] = [
   {

@@ -8,21 +8,27 @@ import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, UserCog, Folder, LayoutGrid } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
-const page = usePage();
-const isAdmin = page.props.auth?.user?.is_admin;
+interface AuthUser {
+  is_admin?: boolean;
+  // add other user properties if needed
+}
+const page = usePage<{ auth?: { user?: AuthUser } }>();
+const isAdmin = !!(page.props.auth && page.props.auth.user && page.props.auth.user.is_admin);
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Środki trwałe',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
-    ...(isAdmin ? [{
-        title: 'Użytkownicy',
-        href: '/users',
-        icon: UserCog,
-    }] : [])
+  {
+    title: 'Środki trwałe',
+    href: '/dashboard',
+    icon: LayoutGrid,
+  }
 ];
+if (isAdmin) {
+  mainNavItems.push({
+    title: 'Użytkownicy',
+    href: '/users',
+    icon: UserCog,
+  });
+}
 
 const footerNavItems: NavItem[] = [
 

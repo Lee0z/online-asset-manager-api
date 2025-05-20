@@ -44,7 +44,10 @@ describe('FixedAssetTable', () => {
                 },
             },
         });
-        await wrapper.find('button:contains("Generuj raport")').trigger('click');
+        // Find the button by text instead of :contains selector
+        const buttons = wrapper.findAll('button');
+        const reportButton = buttons.find(btn => btn.text().includes('Generuj raport'));
+        await reportButton?.trigger('click');
         expect(wrapper.html()).toContain('Generuj raport PDF');
     });
 });

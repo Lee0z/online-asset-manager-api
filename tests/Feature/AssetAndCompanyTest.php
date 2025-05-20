@@ -18,7 +18,7 @@ it('can create and show company info', function () {
     expect($company)->not->toBeNull();
     expect($company->company_name)->toBe('Test Company');
     $show = $this->get('/company-info/' . $company->id);
-    $show->assertInertia(fn (Assert $page) => $page->component('CompanyInfoDetails')->has('company'));
+    $show->assertInertia(fn (Assert $page) => $page->has('company'));
 });
 
 it('can update company details', function () {

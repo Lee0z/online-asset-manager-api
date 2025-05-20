@@ -55,6 +55,7 @@ async function addUser() {
 }
 
 function deleteUser(id: number) {
+  if (id === 1)
   if (confirm('Czy na pewno chcesz usunąć tego użytkownika?')) {
     router.delete(`/users/${id}`);
   }
@@ -88,7 +89,7 @@ function deleteUser(id: number) {
             <td class="px-4 py-2">{{ user.email }}</td>
             <td class="px-4 py-2">{{ user.is_admin ? 'Administrator' : 'Użytkownik' }}</td>
             <td class="px-4 py-2">
-              <button class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600" @click.stop="deleteUser(user.id)">Usuń</button>
+              <button v-if="user.id !== 1" class="px-3 py-1 rounded bg-red-500 text-white hover:bg-red-600" @click.stop="deleteUser(user.id)">Usuń</button>
             </td>
           </tr>
         </tbody>

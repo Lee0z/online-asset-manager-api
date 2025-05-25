@@ -18,7 +18,7 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
 import type { BreadcrumbItem, NavItem, User } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { Box, Menu, Search, LayoutGrid } from 'lucide-vue-next';
+import { Menu, Search, LayoutGrid } from 'lucide-vue-next';
 import { computed } from 'vue';
 
 interface Props {

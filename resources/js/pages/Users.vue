@@ -49,8 +49,9 @@ async function addUser() {
       },
       preserveScroll: true,
     });
-  } catch (e) {
-    addUserError.value = 'Błąd dodawania użytkownika';
+  } catch (error) {
+    console.error('Błąd podczas dodawania użytkownika:', error);
+    addUserError.value = 'Wystąpił błąd podczas dodawania użytkownika';
   }
 }
 

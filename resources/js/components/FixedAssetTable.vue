@@ -179,11 +179,6 @@ function saveAsset(asset: any) {
     }
   }
 }
-function deleteAsset(id: number) {
-  if (confirm('Delete this asset?')) {
-    router.delete(`/fixed-assets/${id}`);
-  }
-}
 </script>
 
 <template>

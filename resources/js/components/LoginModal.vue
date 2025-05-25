@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { Head, router, usePage } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
+import { router } from '@inertiajs/vue3';
+
+defineProps<{ adminSetup?: boolean }>();
 
 const email = ref('');
 const password = ref('');
@@ -8,15 +10,12 @@ const loading = ref(false);
 const toast = ref('');
 const errors = ref<{ [key: string]: string }>({});
 
-const companyName = computed(() => ((usePage().props.company as { company_name?: string })?.company_name ?? ''));
-
 function validateEmail(email: string) {
     return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@(([^<>()[\]\\.,;:\s@"]+\.)+[^<>()[\]\\.,;:\s@"]{2,})$/.test(email);
 }
 
 function submitLogin() {
     errors.value = {};
-    toast.value = '';
     if (!validateEmail(email.value)) {
         errors.value.email = 'Podaj poprawny adres e-mail.';
     }
@@ -34,36 +33,18 @@ function submitLogin() {
     }, {
         onSuccess: () => {
             loading.value = false;
-            // Only show toast if redirected to dashboard
-            if (window.location.pathname === '/dashboard') {
-                toast.value = 'Zalogowano pomyślnie!';
-                setTimeout(() => { toast.value = ''; }, 2000);
-            }
+            toast.value = 'Zalogowano pomyślnie!';
+            setTimeout(() => { toast.value = ''; }, 2000);
         },
-        onError: (errorsFromServer) => {
-            loading.value = false;
-            if (errorsFromServer && errorsFromServer.email) {
-                errors.value.email = errorsFromServer.email;
-            }
-            if (errorsFromServer && errorsFromServer.password) {
-                errors.value.password = errorsFromServer.password;
-            }
-            toast.value = '';
-        },
+        onError: () => { loading.value = false; },
     });
 }
 </script>
 
 <template>
-  <Head title="Logowanie">
-    <link rel="preconnect" href="https://rsms.me/" />
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-  </Head>
-  <div class="flex min-h-screen flex-col items-center justify-center bg-[#FDFDFC] p-6 text-[#1b1b18] dark:bg-[#0a0a0a] lg:justify-center lg:p-8">
+  <div class="flex min-h-screen flex-col items-center justify-center bg-[#FDFDFC] p-6 text-[#1b1b18] dark:bg-[#0a0a0a] lg:justify-center lg:p-8 fixed inset-0 z-50">
     <header class="mb-6 w-full max-w-[335px] text-sm lg:max-w-4xl">
-      <h1 class="text-center text-4xl font-bold text-gray-500 mb-2">Online Asset Manager</h1>
-      <h2 v-if="companyName" class="text-center text-xl font-semibold text-gray-400 mb-2">{{ companyName }}</h2>
-      <h3 class="text-center text-2xl font-bold text-gray-500">Zaloguj się</h3>
+      <h1 class="text-center text-4xl font-bold text-gray-500">Zaloguj się</h1>
     </header>
     <div class="flex flex-col items-center space-y-4">
       <input type="email" class="w-80 rounded border border-gray-900 p-2 text-sm text-gray-500" placeholder="Adres e-mail" v-model="email" :disabled="loading" />

@@ -34,14 +34,14 @@ export default defineConfig({
         watch: {
             usePolling: true,
         },
-         cors: {
+        cors: {
             origin: '*',
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization']
         },
         allowedHosts: ['host.docker.internal']
     },
-    
+
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './resources/js'),

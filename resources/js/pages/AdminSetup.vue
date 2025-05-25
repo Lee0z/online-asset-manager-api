@@ -31,7 +31,7 @@ function submitAdminAccount() {
     }
     if (Object.keys(errors.value).length > 0) {
         loading.value = false;
-        return; // Do not proceed if validation fails
+        return;
     }
     loading.value = true;
     router.post('/admin-setup', {

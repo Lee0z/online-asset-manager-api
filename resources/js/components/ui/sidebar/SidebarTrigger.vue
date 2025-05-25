@@ -9,7 +9,7 @@ const props = defineProps<{
   class?: HTMLAttributes['class']
 }>()
 
-const { toggleSidebar } = useSidebar()
+// Make the button unclickable by not calling toggleSidebar
 </script>
 
 <template>
@@ -19,7 +19,7 @@ const { toggleSidebar } = useSidebar()
     variant="ghost"
     size="icon"
     :class="cn('h-7 w-7', props.class)"
-    @click="toggleSidebar"
+    disabled
   >
     <PanelLeft />
     <span class="sr-only">Toggle Sidebar</span>

@@ -4,29 +4,34 @@ import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { Link, usePage } from '@inertiajs/vue3';
+import { UserCog, LayoutGrid } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
+interface AuthUser {
+  is_admin?: boolean;
+  // add other user properties if needed
+}
+const page = usePage<{ auth?: { user?: AuthUser } }>();
+const isAdmin = !!(page.props.auth && page.props.auth.user && page.props.auth.user.is_admin);
+
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
-    },
+  {
+    title: 'Środki trwałe',
+    href: '/dashboard',
+    icon: LayoutGrid,
+  }
 ];
+if (isAdmin) {
+  mainNavItems.push({
+    title: 'Użytkownicy',
+    href: '/users',
+    icon: UserCog,
+  });
+}
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
+
 ];
 </script>
 

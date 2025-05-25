@@ -13,14 +13,12 @@ class AdminSetupController extends Controller
     public function setup(Request $request)
     {
         if ($request->isMethod('get')) {
-            // Only show if no admin exists
             $adminExists = User::where('is_admin', true)->exists();
             if ($adminExists) {
                 return redirect('/');
             }
             return Inertia::render('AdminSetup');
         }
-        // POST: create admin
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
@@ -34,7 +32,6 @@ class AdminSetupController extends Controller
             'is_active' => true,
         ]);
         Auth::login($user);
-        // Optionally log in the admin or redirect
         return redirect('/');
     }
 }

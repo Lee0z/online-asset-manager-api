@@ -179,6 +179,12 @@ function saveAsset(asset: any) {
     }
   }
 }
+function deleteAsset(id: number) {
+  if (!id) return;
+  router.delete(`/fixed-assets/${id}`, {
+    onSuccess: closeModal,
+  });
+}
 </script>
 
 <template>
@@ -242,7 +248,13 @@ function saveAsset(asset: any) {
         </tr>
       </tbody>
     </table>
-    <AssetModal v-if="showModal" :asset="editAsset" @close="closeModal" @save="saveAsset" />
+    <AssetModal
+      v-if="showModal"
+      :asset="editAsset"
+      @close="closeModal"
+      @save="saveAsset"
+      @delete="deleteAsset"
+    />
     <div v-if="showReportModal" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50" @mousedown.self="closeReportModal">
       <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md relative border border-gray-200 dark:border-gray-700" @mousedown.stop>
         <h3 class="text-xl font-bold mb-4 text-center text-gray-700 dark:text-gray-100">Generuj raport PDF</h3>
